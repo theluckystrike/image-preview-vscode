@@ -1,0 +1,5 @@
+/* CSS url() with and without quotes, a space in a file name, and a data URI */
+.header { background: url(./assets/pattern.png) repeat; }
+.hero { background-image: url("./assets/hero image.png"); background-size: cover; }
+.avatar { background: url('assets/avatar.gif') center / contain no-repeat; }
+.badge { background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16'><circle cx='8' cy='8' r='7' fill='%235ad1b0'/></svg>"); }

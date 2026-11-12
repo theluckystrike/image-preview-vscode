@@ -1,0 +1,15 @@
+{
+  // Path aliases: Image Preview reads these, so "@/assets/logo.svg" resolves to src/assets/logo.svg.
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "jsx": "preserve",
+    "noEmit": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@assets/*": ["./src/assets/*"],
+    },
+  },
+  "include": ["src"],
+}

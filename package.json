@@ -1,0 +1,325 @@
+{
+  "name": "zovo-image-preview",
+  "displayName": "Image Preview & Image Hover",
+  "description": "Image preview in the gutter and on hover for image paths in code, CSS url(), Markdown, HTML, JSX imports, SVG and data URIs. Shows type, pixel size and file size. Resolves @, ~ and tsconfig paths. Local files only, offline.",
+  "version": "0.1.0",
+  "publisher": "zovo",
+  "license": "MIT",
+  "icon": "icon.png",
+  "galleryBanner": {
+    "color": "#1B2433",
+    "theme": "dark"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theluckystrike/image-preview-vscode"
+  },
+  "bugs": {
+    "url": "https://github.com/theluckystrike/image-preview-vscode/issues"
+  },
+  "homepage": "https://github.com/theluckystrike/image-preview-vscode#readme",
+  "engines": {
+    "vscode": "^1.75.0"
+  },
+  "categories": [
+    "Visualization",
+    "Other"
+  ],
+  "keywords": [
+    "image preview",
+    "image hover",
+    "gutter preview",
+    "svg",
+    "assets"
+  ],
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": true
+    },
+    "virtualWorkspaces": false
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "imgPreview.toggleGutter",
+        "title": "Show or Hide Gutter Thumbnails",
+        "category": "Image Preview"
+      },
+      {
+        "command": "imgPreview.openSample",
+        "title": "Open the Sample Files",
+        "category": "Image Preview"
+      },
+      {
+        "command": "imgPreview.openWalkthrough",
+        "title": "Get Started",
+        "category": "Image Preview"
+      },
+      {
+        "command": "imgPreview.moreViewers",
+        "title": "More free tools by Zovo",
+        "category": "Image Preview"
+      },
+      {
+        "command": "imgPreview.supportDeveloper",
+        "title": "Support the developer",
+        "category": "Image Preview"
+      },
+      {
+        "command": "imgPreview.findUnused",
+        "title": "Find Unused Images (Pro)",
+        "category": "Image Preview"
+      },
+      {
+        "command": "imgPreview.findBroken",
+        "title": "Find Broken Image References (Pro)",
+        "category": "Image Preview"
+      },
+      {
+        "command": "imgPreview.weightReport",
+        "title": "Image Weight Report (Pro)",
+        "category": "Image Preview"
+      },
+      {
+        "command": "imgPreview.zovoPro.unused",
+        "title": "Zovo Pro: Find unused images"
+      },
+      {
+        "command": "imgPreview.zovoPro.broken",
+        "title": "Zovo Pro: Find broken image references"
+      },
+      {
+        "command": "imgPreview.zovoPro.weight",
+        "title": "Zovo Pro: Image weight report"
+      },
+      {
+        "command": "imgPreview.getPro",
+        "title": "Get Zovo Pro (USD 19 once, all 22 Zovo extensions)",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "imgPreview.payWithPayPal",
+        "title": "Pay for Zovo Pro with PayPal (USD 19, team of 5 USD 59)",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "imgPreview.unlockWithSponsors",
+        "title": "I already paid: unlock with GitHub Sponsors",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "imgPreview.enterLicenseKey",
+        "title": "Enter Zovo Pro license key",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "imgPreview.removeLicense",
+        "title": "Remove Zovo Pro from this editor",
+        "category": "Zovo Pro"
+      },
+      {
+        "command": "imgPreview.payByCard",
+        "title": "Pay for Zovo Pro by card (USD 19)",
+        "category": "Zovo Pro"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "imgPreview.zovoPro.unused",
+          "when": "explorerResourceIsFolder && config.imgPreview.showProTools",
+          "group": "zovoPro@1"
+        },
+        {
+          "command": "imgPreview.zovoPro.broken",
+          "when": "explorerResourceIsFolder && config.imgPreview.showProTools",
+          "group": "zovoPro@2"
+        },
+        {
+          "command": "imgPreview.zovoPro.weight",
+          "when": "explorerResourceIsFolder && config.imgPreview.showProTools",
+          "group": "zovoPro@3"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "imgPreview.findUnused",
+          "when": "config.imgPreview.showProTools"
+        },
+        {
+          "command": "imgPreview.findBroken",
+          "when": "config.imgPreview.showProTools"
+        },
+        {
+          "command": "imgPreview.weightReport",
+          "when": "config.imgPreview.showProTools"
+        },
+        {
+          "command": "imgPreview.zovoPro.unused",
+          "when": "false"
+        },
+        {
+          "command": "imgPreview.zovoPro.broken",
+          "when": "false"
+        },
+        {
+          "command": "imgPreview.zovoPro.weight",
+          "when": "false"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Image Preview",
+      "properties": {
+        "imgPreview.gutter": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a thumbnail in the gutter next to each line that has an image path or a data:image URI."
+        },
+        "imgPreview.hover": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the image, its type, pixel size and file size when you hover an image path."
+        },
+        "imgPreview.hoverMaxSize": {
+          "type": "number",
+          "default": 220,
+          "minimum": 32,
+          "maximum": 1200,
+          "description": "Longest side of the image in the hover, in pixels. Small images are never scaled up."
+        },
+        "imgPreview.aliases": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          },
+          "default": {},
+          "markdownDescription": "Extra path prefixes, for example `{ \"@images\": \"src/assets/images\", \"#\": \"app\" }`. Values are relative to the workspace folder or absolute. tsconfig.json and jsconfig.json `paths` are read on their own."
+        },
+        "imgPreview.publicFolders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "public",
+            "static",
+            "src",
+            "assets",
+            "app",
+            "www",
+            "wwwroot",
+            "docs"
+          ],
+          "markdownDescription": "Folders searched for paths that start with `/` (the web root), such as `/logo.png` served from `public/`."
+        },
+        "imgPreview.maxFileSizeMB": {
+          "type": "number",
+          "default": 20,
+          "minimum": 1,
+          "maximum": 500,
+          "description": "Images larger than this are measured but not drawn in the gutter or the hover."
+        },
+        "imgPreview.exclude": {
+          "type": "string",
+          "default": "**/{node_modules,.git,dist,build,out,.next,.nuxt,.svelte-kit,.output,coverage,vendor,.venv,venv,target,Pods,DerivedData,bower_components}/**",
+          "description": "Glob of folders the Pro tools skip."
+        },
+        "imgPreview.weightMaxKB": {
+          "type": "number",
+          "default": 200,
+          "minimum": 1,
+          "description": "Image weight report (Pro): files larger than this many KB are flagged."
+        },
+        "imgPreview.weightMaxSide": {
+          "type": "number",
+          "default": 2560,
+          "minimum": 16,
+          "description": "Image weight report (Pro): images wider or taller than this many pixels are flagged."
+        },
+        "imgPreview.archiveFolder": {
+          "type": "string",
+          "default": "_unused-images",
+          "description": "Find unused images (Pro): folder, in the workspace folder, that confirmed unused images move to. Their folder structure is kept, and Undo moves them back."
+        },
+        "imgPreview.showProTools": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the Zovo Pro tools (unused images, broken references, weight report) in the Command Palette and the Explorer menu. Everything free stays visible."
+        },
+        "imgPreview.askForRating": {
+          "type": "boolean",
+          "default": true,
+          "description": "Ask once for a Marketplace rating after the extension showed images on two occasions at least 30 minutes apart. \"Later\" asks one more time after 7 days, \"No thanks\" never asks again. Nothing is sent anywhere."
+        },
+        "imgPreview.showSupportLinks": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the small Rate, More free viewers and Zovo Pro links at the bottom of the image hover. Nothing is sent anywhere."
+        }
+      }
+    },
+    "walkthroughs": [
+      {
+        "id": "imgPreview.start",
+        "title": "Get started with Image Preview",
+        "description": "See the images your code, styles and docs point to, without leaving the editor.",
+        "steps": [
+          {
+            "id": "open",
+            "title": "Thumbnails in the gutter",
+            "description": "Open any file that names an image: a JSX import, a CSS url(), a Markdown image, an HTML src or srcset, or a data:image URI. A thumbnail shows in the gutter next to the line.\n[Open the sample files](command:imgPreview.openSample)",
+            "media": {
+              "image": "images/screenshot.png",
+              "altText": "A TSX file in VS Code with image thumbnails in the gutter and a hover that shows a PNG with its pixel size and file size."
+            },
+            "completionEvents": [
+              "onCommand:imgPreview.openSample"
+            ]
+          },
+          {
+            "id": "hover",
+            "title": "Hover for size and type",
+            "description": "Hover a path to see the image, its type, its size in pixels and on disk, and links to open it or show it in the Explorer. Paths with @, ~, a leading / (public folder) or tsconfig paths work.",
+            "media": {
+              "markdown": "walkthrough/hover.md"
+            }
+          },
+          {
+            "id": "settings",
+            "title": "Aliases and settings",
+            "description": "Add your own path prefixes, choose the hover size, or turn the gutter off.\n[Open settings](command:workbench.action.openSettings?%5B%22imgPreview%22%5D)",
+            "media": {
+              "markdown": "walkthrough/settings.md"
+            },
+            "completionEvents": [
+              "onCommand:workbench.action.openSettings"
+            ]
+          },
+          {
+            "id": "zovo-related",
+            "title": "Files that go with this one",
+            "description": "If your project also has video files or TIFF images, these free Zovo extensions open them. A link opens the extension page, and you choose there whether to install it.\n[Video Preview](command:extension.open?%5B%22zovo.video-preview-with-sound%22%5D)\n[TIFF Viewer](command:extension.open?%5B%22zovo.tiff-viewer%22%5D)",
+            "media": {
+              "markdown": "walkthrough/related.md"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "scripts": {
+    "test": "node scripts/test.js",
+    "package": "npx -y @vscode/vsce@3 package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/vscode": "~1.75.0"
+  },
+  "sponsor": {
+    "url": "https://github.com/sponsors/theluckystrike/sponsorships?tier_id=679878"
+  }
+}
